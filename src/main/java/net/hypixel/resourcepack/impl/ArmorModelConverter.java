@@ -1,16 +1,17 @@
 package net.hypixel.resourcepack.impl;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
 import net.hypixel.resourcepack.Converter;
 import net.hypixel.resourcepack.MinecraftVersion;
 import net.hypixel.resourcepack.PackConverter;
 import net.hypixel.resourcepack.Util;
 import net.hypixel.resourcepack.pack.Pack;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class ArmorModelConverter extends Converter {
 
@@ -90,10 +91,15 @@ public class ArmorModelConverter extends Converter {
             System.out.println("      Copied " + relativeLegacyDirectory + " to " + relativeModernDirectory);
         }
 
-        if (Files.list(legacyArmorModelDirectory).count() == 0) {
-            Files.deleteIfExists(legacyArmorModelDirectory);
-            System.out.println("      Deleting now empty directory " + pack.getWorkingPath().relativize(legacyArmorModelDirectory));
+        try (Stream<Path> list = Files.list(legacyArmorModelDirectory)) {
+
+            if (!list.findAny().isPresent()) {
+                Files.deleteIfExists(legacyArmorModelDirectory);
+                System.out.println("      Deleting now empty directory " + pack.getWorkingPath().relativize(legacyArmorModelDirectory));
+            }
+
         }
+
     }
 
 }

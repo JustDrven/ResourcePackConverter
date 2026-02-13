@@ -1,19 +1,21 @@
 package net.hypixel.resourcepack.impl;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.hypixel.resourcepack.Converter;
-import net.hypixel.resourcepack.PackConverter;
 import net.hypixel.resourcepack.MinecraftVersion;
+import net.hypixel.resourcepack.PackConverter;
 import net.hypixel.resourcepack.Util;
 import net.hypixel.resourcepack.pack.Pack;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 public class AnimationConverter extends Converter {
 
@@ -35,33 +37,38 @@ public class AnimationConverter extends Converter {
     protected void fixAnimations(Path animations) throws IOException {
         if (!animations.toFile().exists()) return;
 
-        Files.list(animations)
-                .filter(file -> file.toString().endsWith(".png.mcmeta"))
-                .forEach(file -> {
-                    try {
-                        JsonObject json = Util.readJson(packConverter.getGson(), file);
+        try (Stream<Path> list = Files.list(animations)) {
 
-                        boolean anyChanges = false;
-                        JsonElement animationElement = json.get("animation");
-                        if (animationElement instanceof JsonObject) {
-                            JsonObject animationObject = (JsonObject) animationElement;
+            list
+                    .filter(file -> file.toString().endsWith(".png.mcmeta"))
+                    .forEach(file -> {
+                        try {
+                            JsonObject json = Util.readJson(packConverter.getGson(), file);
 
-                            // TODO: Confirm this doesn't break any packs
-                            animationObject.remove("width");
-                            animationObject.remove("height");
+                            boolean anyChanges = false;
+                            JsonElement animationElement = json.get("animation");
+                            if (animationElement instanceof JsonObject) {
+                                JsonObject animationObject = (JsonObject) animationElement;
 
-                            anyChanges = true;
+                                // TODO: Confirm this doesn't break any packs
+                                animationObject.remove("width");
+                                animationObject.remove("height");
+
+                                anyChanges = true;
+                            }
+
+                            if (anyChanges) {
+                                Files.write(file, Collections.singleton(packConverter.getGson().toJson(json)), StandardCharsets.UTF_8);
+
+                                if (PackConverter.DEBUG) System.out.println("      Converted " + file.getFileName());
+                            }
+                        } catch (IOException e) {
+                            Util.propagate(e);
                         }
+                    });
 
-                        if (anyChanges) {
-                            Files.write(file, Collections.singleton(packConverter.getGson().toJson(json)), Charset.forName("UTF-8"));
 
-                            if (PackConverter.DEBUG) System.out.println("      Converted " + file.getFileName());
-                        }
-                    } catch (IOException e) {
-                        Util.propagate(e);
-                    }
-                });
+        }
 
     }
 }

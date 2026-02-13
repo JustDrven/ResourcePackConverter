@@ -1,18 +1,19 @@
 package net.hypixel.resourcepack.impl;
 
+import net.hypixel.resourcepack.Converter;
+import net.hypixel.resourcepack.MinecraftVersion;
+import net.hypixel.resourcepack.PackConverter;
+import net.hypixel.resourcepack.Util;
+import net.hypixel.resourcepack.pack.Pack;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import net.hypixel.resourcepack.Converter;
-import net.hypixel.resourcepack.PackConverter;
-import net.hypixel.resourcepack.MinecraftVersion;
-import net.hypixel.resourcepack.Util;
-import net.hypixel.resourcepack.pack.Pack;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -68,11 +69,11 @@ public class SoundsConverter extends Converter {
                         // windows fix
                         sound = sound.replaceAll("\\\\", "/");
 
-                        JsonElement newSound = null;
+                        JsonElement newSound;
                         if (jsonElement instanceof JsonObject) {
                             ((JsonObject) jsonElement).addProperty("name", sound);
                             newSound = jsonElement;
-                        } else if (jsonElement instanceof JsonPrimitive) {
+                        } else {
                             newSound = new JsonPrimitive(jsonElement.getAsString());
                         }
 
@@ -85,7 +86,7 @@ public class SoundsConverter extends Converter {
             }
         }
 
-        Files.write(soundsJsonPath, Collections.singleton(packConverter.getGson().toJson(newSoundsObject)), Charset.forName("UTF-8"));
+        Files.write(soundsJsonPath, Collections.singleton(packConverter.getGson().toJson(newSoundsObject)), StandardCharsets.UTF_8);
     }
 
 }

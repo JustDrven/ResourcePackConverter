@@ -1,16 +1,32 @@
 package net.hypixel.resourcepack;
 
+import net.hypixel.resourcepack.impl.AnimationConverter;
+import net.hypixel.resourcepack.impl.ArmorModelConverter;
+import net.hypixel.resourcepack.impl.BlockStateConverter;
+import net.hypixel.resourcepack.impl.MapIconConverter;
+import net.hypixel.resourcepack.impl.ModelConverter;
+import net.hypixel.resourcepack.impl.NameConverter;
+import net.hypixel.resourcepack.impl.PackMetaConverter;
+import net.hypixel.resourcepack.impl.PaintingConverter;
+import net.hypixel.resourcepack.impl.ParticleSeparatorConverter;
+import net.hypixel.resourcepack.impl.ParticleSizeChangeConverter;
+import net.hypixel.resourcepack.impl.SoundsConverter;
+import net.hypixel.resourcepack.impl.SpacesConverter;
+import net.hypixel.resourcepack.impl.UnicodeFontConverter;
+import net.hypixel.resourcepack.pack.Pack;
+
+import joptsimple.OptionSet;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import joptsimple.OptionSet;
-import net.hypixel.resourcepack.impl.*;
-import net.hypixel.resourcepack.pack.Pack;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class PackConverter {
 
@@ -29,32 +45,33 @@ public class PackConverter {
         if (!this.optionSet.has(Options.MINIFY)) {
             gsonBuilder.setPrettyPrinting();
         }
-        this.gson = gsonBuilder.create();
-        this.version = this.optionSet.valueOf(Options.VERSION);
-        if (this.version == null) {
+
+        gson = gsonBuilder.create();
+        version = optionSet.valueOf(Options.VERSION);
+        if (version == null) {
             System.out.println("Invalid version provided!");
             System.exit(0);
             return;
         }
 
         // this needs to be run first, other converters might reference new directory names
-        this.registerConverter(new NameConverter(this));
+        registerConverter(new NameConverter(this));
 
         for (MinecraftVersion version : MinecraftVersion.values()) {
-            this.registerConverter(new PackMetaConverter(this, version));
+            registerConverter(new PackMetaConverter(this, version));
         }
 
-        this.registerConverter(new ModelConverter(this));
-        this.registerConverter(new SpacesConverter(this));
-        this.registerConverter(new SoundsConverter(this));
-        this.registerConverter(new ParticleSizeChangeConverter(this));
-        this.registerConverter(new ParticleSeparatorConverter(this));
-        this.registerConverter(new BlockStateConverter(this));
-        this.registerConverter(new AnimationConverter(this));
-        this.registerConverter(new MapIconConverter(this));
-        this.registerConverter(new PaintingConverter(this));
-        this.registerConverter(new UnicodeFontConverter(this));
-        this.registerConverter(new ArmorModelConverter(this));
+        registerConverter(new ModelConverter(this));
+        registerConverter(new SpacesConverter(this));
+        registerConverter(new SoundsConverter(this));
+        registerConverter(new ParticleSizeChangeConverter(this));
+        registerConverter(new ParticleSeparatorConverter(this));
+        registerConverter(new BlockStateConverter(this));
+        registerConverter(new AnimationConverter(this));
+        registerConverter(new MapIconConverter(this));
+        registerConverter(new PaintingConverter(this));
+        registerConverter(new UnicodeFontConverter(this));
+        registerConverter(new ArmorModelConverter(this));
     }
 
     public void registerConverter(Converter converter) {
@@ -67,7 +84,9 @@ public class PackConverter {
     }
 
     public void run() throws IOException {
-        Files.list(optionSet.valueOf(Options.INPUT_DIR))
+        try (Stream<Path> list = Files.list(optionSet.valueOf(Options.INPUT_DIR))) {
+
+            list
                 .map(Pack::parse)
                 .filter(Objects::nonNull)
                 .forEach(pack -> {
@@ -93,6 +112,9 @@ public class PackConverter {
                         Util.propagate(t);
                     }
                 });
+
+        }
+
     }
 
     public Gson getGson() {

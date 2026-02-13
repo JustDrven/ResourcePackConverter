@@ -42,9 +42,8 @@ public class ZipPack extends Pack {
             }
 
             Path convertedZipPath = getConvertedZipPath();
-            if (convertedZipPath.toFile().exists()) {
+            if (convertedZipPath.toFile().delete()) {
                 System.out.println("  Deleting existing conversion zip");
-                convertedZipPath.toFile().delete();
             }
 
             pack.getWorkingPath().toFile().mkdir();

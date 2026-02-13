@@ -1,13 +1,19 @@
 package net.hypixel.resourcepack;
 
+import javax.imageio.ImageIO;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -49,15 +55,18 @@ public final class Util {
 
     public static boolean fileExistsCorrectCasing(Path path) throws IOException {
         if (!path.toFile().exists()) return false;
+
         return path.toString().equals(path.toFile().getCanonicalPath());
     }
 
     public static JsonObject readJsonResource(Gson gson, String path) {
         try (InputStream stream = PackConverter.class.getResourceAsStream(path)) {
             if (stream == null) return null;
+
             try (InputStreamReader streamReader = new InputStreamReader(stream)) {
                 return gson.fromJson(streamReader, JsonObject.class);
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -99,11 +108,13 @@ public final class Util {
     }
 
     /**
-     * @return null if file doesn't exist, {@code true} if successfully renamed, {@code false} if failed
+     * @return false if file doesn't exist, {@code true} if successfully renamed, {@code false} if failed
      */
-    public static Boolean renameFile(Path file, String newName) {
-        if (!file.toFile().exists()) return null;
-        return file.toFile().renameTo(new File(file.getParent() + "/" + newName));
+    public static boolean renameFile(Path file, String newName) {
+        File f = file.toFile();
+        if (!f.exists()) return false;
+
+        return f.renameTo(new File(file.getParent() + "/" + newName));
     }
 
     public static RuntimeException propagate(Throwable t) {

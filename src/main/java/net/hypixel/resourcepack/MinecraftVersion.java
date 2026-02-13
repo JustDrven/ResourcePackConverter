@@ -1,7 +1,6 @@
 package net.hypixel.resourcepack;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumSet;
 
 public enum MinecraftVersion {
 
@@ -9,23 +8,15 @@ public enum MinecraftVersion {
     v1_14("1.14", 4),
     v1_20("1.20", 15),
     v1_21_2("1.21.2", 42)
+
     ;
 
-    private static final Map<String, MinecraftVersion> BY_NAME;
-
-    static {
-        MinecraftVersion[] versions = values();
-        BY_NAME = new HashMap<>(versions.length);
-
-        for (MinecraftVersion version : versions) {
-            BY_NAME.put(version.gameVersionName, version);
-        }
-    }
+    private static final EnumSet<MinecraftVersion> VALUES = EnumSet.allOf(MinecraftVersion.class);
 
     private final String gameVersionName;
     private final int packFormat;
 
-    private MinecraftVersion(String gameVersionName, int packFormat) {
+    MinecraftVersion(String gameVersionName, int packFormat) {
         this.gameVersionName = gameVersionName;
         this.packFormat = packFormat;
     }
@@ -39,12 +30,15 @@ public enum MinecraftVersion {
     }
 
     public static MinecraftVersion getByName(String name) {
-        return BY_NAME.get(name);
+        return VALUES.stream()
+                .filter((version) -> version.getGameVersionName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public static MinecraftVersion getLatest() {
-        MinecraftVersion[] versions = values();
-        return versions[versions.length - 1];
+        MinecraftVersion[] array = ((MinecraftVersion[]) VALUES.toArray());
+        return array[array.length - 1];
     }
 
 }

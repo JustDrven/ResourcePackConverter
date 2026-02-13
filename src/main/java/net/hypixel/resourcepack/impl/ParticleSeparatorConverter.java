@@ -5,7 +5,9 @@ import net.hypixel.resourcepack.MinecraftVersion;
 import net.hypixel.resourcepack.PackConverter;
 import net.hypixel.resourcepack.pack.Pack;
 
-import java.awt.Graphics;
+import javax.imageio.ImageIO;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +16,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.imageio.ImageIO;
 
 public class ParticleSeparatorConverter extends Converter {
 
@@ -71,9 +72,9 @@ public class ParticleSeparatorConverter extends Converter {
         System.out.println("      Deleted particles.png");
     }
 
-    private static interface ExtractableParticle {
+    private interface ExtractableParticle {
 
-        public void extract(Path particlesDirectory, BufferedImage textureAtlas) throws IOException;
+        void extract(Path particlesDirectory, BufferedImage textureAtlas) throws IOException;
 
     }
 

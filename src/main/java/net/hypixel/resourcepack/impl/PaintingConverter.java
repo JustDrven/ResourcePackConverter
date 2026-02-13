@@ -7,6 +7,7 @@ import net.hypixel.resourcepack.Util;
 import net.hypixel.resourcepack.pack.Pack;
 
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

@@ -1,12 +1,13 @@
 package net.hypixel.resourcepack.impl;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.hypixel.resourcepack.Converter;
-import net.hypixel.resourcepack.PackConverter;
 import net.hypixel.resourcepack.MinecraftVersion;
+import net.hypixel.resourcepack.PackConverter;
 import net.hypixel.resourcepack.Util;
 import net.hypixel.resourcepack.pack.Pack;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class NameConverter extends Converter {
 
@@ -51,21 +53,29 @@ public class NameConverter extends Converter {
 
     protected void renameAll(Mapping mapping, String extension, Path path) throws IOException {
         if (path.toFile().exists()) {
-            Files.list(path).forEach(path1 -> {
-                if (!path1.toString().endsWith(extension)) return;
 
-                String baseName = path1.getFileName().toString().substring(0, path1.getFileName().toString().length() - extension.length());
-                String newName = mapping.remap(baseName);
-                if (newName != null && !newName.equals(baseName)) {
-                    Boolean ret = Util.renameFile(path1, newName + extension);
-                    if (ret == null) return;
-                    if (ret && PackConverter.DEBUG) {
-                        System.out.println("      Renamed: " + path1.getFileName().toString() + "->" + newName + extension);
-                    } else if (!ret) {
-                        System.err.println("      Failed to rename: " + path1.getFileName().toString() + "->" + newName + extension);
+            try (Stream<Path> list = Files.list(path)) {
+
+                list.forEach(path1 -> {
+                    if (!path1.toString().endsWith(extension)) return;
+
+                    String baseName = path1.getFileName().toString().substring(0, path1.getFileName().toString().length() - extension.length());
+                    String newName = mapping.remap(baseName);
+                    if (newName != null && !newName.equals(baseName)) {
+                        boolean ret = Util.renameFile(path1, newName + extension);
+
+                        if (ret && PackConverter.DEBUG) {
+                            System.out.println("      Renamed: " + path1.getFileName().toString() + "->" + newName + extension);
+                        } else if (!ret) {
+                            System.err.println("      Failed to rename: " + path1.getFileName().toString() + "->" + newName + extension);
+                        }
+
                     }
-                }
-            });
+                });
+
+
+            }
+
         }
     }
 
