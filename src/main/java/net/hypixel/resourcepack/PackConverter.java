@@ -42,7 +42,7 @@ public class PackConverter {
         this.optionSet = optionSet;
 
         GsonBuilder gsonBuilder = new GsonBuilder();
-        if (!this.optionSet.has(Options.MINIFY)) {
+        if (!optionSet.has(Options.MINIFY)) {
             gsonBuilder.setPrettyPrinting();
         }
 
@@ -54,12 +54,17 @@ public class PackConverter {
             return;
         }
 
+        registerConverters();
+
+    }
+
+    private void registerConverters() {
         // this needs to be run first, other converters might reference new directory names
         registerConverter(new NameConverter(this));
 
-        for (MinecraftVersion version : MinecraftVersion.values()) {
+        for (MinecraftVersion version : MinecraftVersion.VALUES)
             registerConverter(new PackMetaConverter(this, version));
-        }
+
 
         registerConverter(new ModelConverter(this));
         registerConverter(new SpacesConverter(this));
@@ -87,31 +92,33 @@ public class PackConverter {
         try (Stream<Path> list = Files.list(optionSet.valueOf(Options.INPUT_DIR))) {
 
             list
-                .map(Pack::parse)
-                .filter(Objects::nonNull)
-                .forEach(pack -> {
-                    try {
-                        System.out.println("Converting " + pack);
+                    .map(Pack::parse)
+                    .filter(Objects::nonNull)
+                    .forEach(pack -> {
+                        try {
+                            System.out.println("Converting " + pack);
 
-                        pack.getHandler().setup();
+                            pack.getHandler().setup();
 
-                        System.out.println("  Running Converters");
-                        for (Converter converter : converters.values()) {
-                            if (version.ordinal() < converter.getVersion().ordinal()) {
-                                continue;
+                            System.out.println("  Running Converters");
+                            for (Converter converter : converters.values()) {
+                                if (version.ordinal() < converter.getVersion().ordinal()) {
+                                    continue;
+                                }
+
+                                if (PackConverter.DEBUG) {
+                                    System.out.println("    Running " + converter.getClass().getSimpleName());
+                                }
+
+                                converter.convert(pack);
                             }
-                            if (PackConverter.DEBUG) {
-                                System.out.println("    Running " + converter.getClass().getSimpleName());
-                            }
-                            converter.convert(pack);
+
+                            pack.getHandler().finish();
+                        } catch (Throwable t) {
+                            System.err.println("Failed to convert!");
+                            Util.propagate(t);
                         }
-
-                        pack.getHandler().finish();
-                    } catch (Throwable t) {
-                        System.err.println("Failed to convert!");
-                        Util.propagate(t);
-                    }
-                });
+                    });
 
         }
 

@@ -17,10 +17,6 @@ public class Pack {
         this.handler = createHandler();
     }
 
-    public Handler createHandler() {
-        return new Handler(this);
-    }
-
     public static Pack parse(Path path) {
         if (!path.toString().contains(CONVERTED_SUFFIX)) {
             if (path.toFile().isDirectory() && path.resolve("pack.mcmeta").toFile().exists()) {
@@ -30,6 +26,10 @@ public class Pack {
             }
         }
         return null;
+    }
+
+    public Handler createHandler() {
+        return new Handler(this);
     }
 
     public Path getOriginalPath() {

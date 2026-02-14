@@ -7,11 +7,9 @@ public enum MinecraftVersion {
     v1_13("1.13", 4),
     v1_14("1.14", 4),
     v1_20("1.20", 15),
-    v1_21_2("1.21.2", 42)
+    v1_21_2("1.21.2", 42);
 
-    ;
-
-    private static final EnumSet<MinecraftVersion> VALUES = EnumSet.allOf(MinecraftVersion.class);
+    public static final EnumSet<MinecraftVersion> VALUES = EnumSet.allOf(MinecraftVersion.class);
 
     private final String gameVersionName;
     private final int packFormat;
@@ -19,14 +17,6 @@ public enum MinecraftVersion {
     MinecraftVersion(String gameVersionName, int packFormat) {
         this.gameVersionName = gameVersionName;
         this.packFormat = packFormat;
-    }
-
-    public String getGameVersionName() {
-        return gameVersionName;
-    }
-
-    public int getPackFormat() {
-        return packFormat;
     }
 
     public static MinecraftVersion getByName(String name) {
@@ -37,8 +27,16 @@ public enum MinecraftVersion {
     }
 
     public static MinecraftVersion getLatest() {
-        MinecraftVersion[] array = ((MinecraftVersion[]) VALUES.toArray());
-        return array[array.length - 1];
+        Object[] array = VALUES.toArray();
+        return (MinecraftVersion) array[array.length - 1];
+    }
+
+    public String getGameVersionName() {
+        return gameVersionName;
+    }
+
+    public int getPackFormat() {
+        return packFormat;
     }
 
 }

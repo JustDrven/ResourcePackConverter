@@ -22,6 +22,27 @@ public class UnicodeFontConverter extends Converter {
         super(packConverter);
     }
 
+    private static JsonObject createBitMapJsonData(String textureFileName, int startingUnicode) {
+        final int capacity = 16;
+        JsonArray chars = new JsonArray(capacity);
+
+        for (int i = 0; i < capacity; i++) {
+            StringBuilder line = new StringBuilder();
+            for (int j = 0; j < capacity; j++) {
+                int offset = (i * capacity) + j;
+                line.append(String.format("\\u%04x", startingUnicode + offset));
+            }
+            chars.add(line.toString());
+        }
+
+        JsonObject provider = new JsonObject();
+        provider.addProperty("type", "bitmap");
+        provider.addProperty("file", "minecraft:font/" + textureFileName);
+        provider.addProperty("ascent", 7);
+        provider.add("chars", chars);
+        return provider;
+    }
+
     @Override
     public MinecraftVersion getVersion() {
         return MinecraftVersion.v1_20;
@@ -99,7 +120,6 @@ public class UnicodeFontConverter extends Converter {
             fontDefinitionRoot.add("providers", providers = new JsonArray());
 
 
-
         if (providers == null)
             throw new IllegalStateException("Could not fetch \"providers\" array from font definition \"" + fontDefinitionRoot + "\"");
 
@@ -123,8 +143,8 @@ public class UnicodeFontConverter extends Converter {
 
     private JsonObject createDefaultFontDefinitionJson() {
         return createFontDefinitionJson(
-            createReferenceProvider("minecraft:include/space"),
-            createReferenceProvider("minecraft:include/default", true)
+                createReferenceProvider("minecraft:include/space"),
+                createReferenceProvider("minecraft:include/default", true)
         );
     }
 
@@ -135,27 +155,6 @@ public class UnicodeFontConverter extends Converter {
         startingUnicode <<= 8;
 
         return createBitMapJsonData(textureFileName, startingUnicode);
-    }
-
-    private static JsonObject createBitMapJsonData(String textureFileName, int startingUnicode) {
-        final int capacity = 16;
-        JsonArray chars = new JsonArray(capacity);
-
-        for (int i = 0; i < capacity; i++) {
-            StringBuilder line = new StringBuilder();
-            for (int j = 0; j < capacity; j++) {
-                int offset = (i * capacity) + j;
-                line.append(String.format("\\u%04x", startingUnicode + offset));
-            }
-            chars.add(line.toString());
-        }
-
-        JsonObject provider = new JsonObject();
-        provider.addProperty("type", "bitmap");
-        provider.addProperty("file", "minecraft:font/" + textureFileName);
-        provider.addProperty("ascent", 7);
-        provider.add("chars", chars);
-        return provider;
     }
 
     private JsonObject createReferenceProvider(String id, boolean filterUniform) {

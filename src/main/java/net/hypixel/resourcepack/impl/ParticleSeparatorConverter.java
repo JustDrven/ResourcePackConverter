@@ -20,29 +20,29 @@ import java.util.List;
 public class ParticleSeparatorConverter extends Converter {
 
     private static final List<ExtractableParticle> PARTICLES = Arrays.asList(
-        new HorizontalParticleSequence("generic", 0, 0, 8),
-        // new HorizontalParticleSequence("unknown_particle_sequence", 0, 8, 3), // Maybe "big splash"? Couldn't find it in modern packs
-        new HorizontalParticleSequence("splash", 24, 8, 4),
-        new Particle("bubble", 0, 16),
-        // new Particle("unknown_particle", 8, 16), // Fishing bobber. Likely just replaced with an entity texture
-        new Particle("flash", 32, 16, 32, 32),
-        new Particle("flame", 0, 24),
-        // new Particle("unknown_particle", 8, 24), // Looks like flame but zoomed in and centered. Ember? Does that exist?
-        new Particle("note", 0, 32),
-        new Particle("critical_hit", 8, 32),
-        new Particle("enchanted_hit", 16, 32),
-        new Particle("heart", 0, 40),
-        new Particle("angry", 8, 40),
-        new Particle("glint", 16, 40),
-        // new Particle("unknown_particle", 24, 40) // An angry villager? Was this unused?
-        // new Particle("unknown_particle", 0, 48) // A blue drip?
-        // new Particle("glint", 8, 48) // A blue sphere/orb thing
-        new Particle("drip_hang", 0, 56),
-        new Particle("drip_fall", 8, 56),
-        new Particle("drip_land", 16, 56),
-        new HorizontalParticleSequence("spell", 0, 64, 8),
-        // new HorizontalParticleSequence("unknown_particle_sequence", 0, 72, 8), // Looks VERY similar to spark, but it's not the same
-        new HorizontalParticleSequence("spark", 0, 80, 8)
+            new HorizontalParticleSequence("generic", 0, 0, 8),
+            // new HorizontalParticleSequence("unknown_particle_sequence", 0, 8, 3), // Maybe "big splash"? Couldn't find it in modern packs
+            new HorizontalParticleSequence("splash", 24, 8, 4),
+            new Particle("bubble", 0, 16),
+            // new Particle("unknown_particle", 8, 16), // Fishing bobber. Likely just replaced with an entity texture
+            new Particle("flash", 32, 16, 32, 32),
+            new Particle("flame", 0, 24),
+            // new Particle("unknown_particle", 8, 24), // Looks like flame but zoomed in and centered. Ember? Does that exist?
+            new Particle("note", 0, 32),
+            new Particle("critical_hit", 8, 32),
+            new Particle("enchanted_hit", 16, 32),
+            new Particle("heart", 0, 40),
+            new Particle("angry", 8, 40),
+            new Particle("glint", 16, 40),
+            // new Particle("unknown_particle", 24, 40) // An angry villager? Was this unused?
+            // new Particle("unknown_particle", 0, 48) // A blue drip?
+            // new Particle("glint", 8, 48) // A blue sphere/orb thing
+            new Particle("drip_hang", 0, 56),
+            new Particle("drip_fall", 8, 56),
+            new Particle("drip_land", 16, 56),
+            new HorizontalParticleSequence("spell", 0, 64, 8),
+            // new HorizontalParticleSequence("unknown_particle_sequence", 0, 72, 8), // Looks VERY similar to spark, but it's not the same
+            new HorizontalParticleSequence("spark", 0, 80, 8)
     );
 
     // 1.14 separated particles into their own individual files

@@ -43,10 +43,12 @@ public class NameConverter extends Converter {
         renameAll(itemMapping, ".json", blockStates);
 
         Path textures = pack.getWorkingPath().resolve("assets" + File.separator + "minecraft" + File.separator + "textures");
-        if (textures.resolve("blocks").toFile().exists()) Files.move(textures.resolve("blocks"), textures.resolve("block"));
+        if (textures.resolve("blocks").toFile().exists())
+            Files.move(textures.resolve("blocks"), textures.resolve("block"));
         renameAll(blockMapping, ".png", textures.resolve("block"));
         renameAll(blockMapping, ".png.mcmeta", textures.resolve("block"));
-        if (textures.resolve("items").toFile().exists()) Files.move(textures.resolve("items"), textures.resolve("item"));
+        if (textures.resolve("items").toFile().exists())
+            Files.move(textures.resolve("items"), textures.resolve("item"));
         renameAll(itemMapping, ".png", textures.resolve("item"));
         renameAll(itemMapping, ".png.mcmeta", textures.resolve("item"));
     }

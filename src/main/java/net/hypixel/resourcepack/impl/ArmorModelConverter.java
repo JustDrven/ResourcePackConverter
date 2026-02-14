@@ -16,21 +16,21 @@ import java.util.stream.Stream;
 public class ArmorModelConverter extends Converter {
 
     private static final Map<String, String> ARMOR_TEXTURES = Util.createMap(HashMap::new, map -> {
-            map.put("chainmail_layer_1", "chainmail");
-            map.put("diamond_layer_1", "diamond");
-            map.put("gold_layer_1", "gold");
-            map.put("iron_layer_1", "iron");
-            map.put("leather_layer_1", "leather");
-            map.put("leather_layer_1_overlay", "leather_overlay");
+        map.put("chainmail_layer_1", "chainmail");
+        map.put("diamond_layer_1", "diamond");
+        map.put("gold_layer_1", "gold");
+        map.put("iron_layer_1", "iron");
+        map.put("leather_layer_1", "leather");
+        map.put("leather_layer_1_overlay", "leather_overlay");
     });
 
     private static final Map<String, String> LEGGING_TEXTURES = Util.createMap(HashMap::new, map -> {
-            map.put("chainmail_layer_2", "chainmail");
-            map.put("diamond_layer_2", "diamond");
-            map.put("gold_layer_2", "gold");
-            map.put("iron_layer_2", "iron");
-            map.put("leather_layer_2", "leather");
-            map.put("leather_layer_2_overlay", "leather_overlay");
+        map.put("chainmail_layer_2", "chainmail");
+        map.put("diamond_layer_2", "diamond");
+        map.put("gold_layer_2", "gold");
+        map.put("iron_layer_2", "iron");
+        map.put("leather_layer_2", "leather");
+        map.put("leather_layer_2_overlay", "leather_overlay");
     });
 
     public ArmorModelConverter(PackConverter packConverter) {

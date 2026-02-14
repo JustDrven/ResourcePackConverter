@@ -109,10 +109,10 @@ public class PaintingConverter extends Converter {
     }
 
     private static class Location {
-        int x;
-        int y;
         private final int width;
         private final int height;
+        int x;
+        int y;
 
         Location(int x, int y, int width, int height) {
             this.x = x;
