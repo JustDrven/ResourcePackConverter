@@ -4,26 +4,27 @@ import net.hypixel.resourcepack.Converter;
 import net.hypixel.resourcepack.MinecraftVersion;
 import net.hypixel.resourcepack.PackConverter;
 import net.hypixel.resourcepack.Util;
+import net.hypixel.resourcepack.impl.mapping.Mapping;
+import net.hypixel.resourcepack.impl.mapping.type.BlockMapping;
+import net.hypixel.resourcepack.impl.mapping.type.ItemMapping;
 import net.hypixel.resourcepack.pack.Pack;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class NameConverter extends Converter {
 
-    protected final Mapping blockMapping = new BlockMapping();
-    protected final Mapping itemMapping = new ItemMapping();
+    protected final Mapping blockMapping;
+    protected final Mapping itemMapping;
 
     public NameConverter(PackConverter packConverter) {
         super(packConverter);
+
+        blockMapping = new BlockMapping(packConverter);
+        itemMapping = new ItemMapping(packConverter);
     }
 
     @Override
@@ -89,50 +90,5 @@ public class NameConverter extends Converter {
         return itemMapping;
     }
 
-    protected abstract static class Mapping {
 
-        protected final Map<String, String> mapping = new HashMap<>();
-
-        public Mapping() {
-            load();
-        }
-
-        protected abstract void load();
-
-        /**
-         * @return remapped or in if not present
-         */
-        public String remap(String in) {
-            return mapping.getOrDefault(in, in);
-        }
-
-    }
-
-    protected class BlockMapping extends Mapping {
-
-        @Override
-        protected void load() {
-            JsonObject blocks = Util.readJsonResource(packConverter.getGson(), "/blocks.json");
-            if (blocks != null) {
-                for (Map.Entry<String, JsonElement> entry : blocks.entrySet()) {
-                    this.mapping.put(entry.getKey(), entry.getValue().getAsString());
-                }
-            }
-        }
-
-    }
-
-    protected class ItemMapping extends Mapping {
-
-        @Override
-        protected void load() {
-            JsonObject items = Util.readJsonResource(packConverter.getGson(), "/items.json");
-            if (items != null) {
-                for (Map.Entry<String, JsonElement> entry : items.entrySet()) {
-                    this.mapping.put(entry.getKey(), entry.getValue().getAsString());
-                }
-            }
-        }
-
-    }
 }
