@@ -33,47 +33,47 @@ public class PaintingConverter extends Converter {
      */
     private void registerPaintings() {
         // 1x1 paintings
-        this.paintings.put(new Location(0, 0, 1, 1), "kebab");
-        this.paintings.put(new Location(1, 0, 1, 1), "aztec");
-        this.paintings.put(new Location(2, 0, 1, 1), "alban");
-        this.paintings.put(new Location(3, 0, 1, 1), "aztec2");
-        this.paintings.put(new Location(4, 0, 1, 1), "bomb");
-        this.paintings.put(new Location(5, 0, 1, 1), "plant");
-        this.paintings.put(new Location(6, 0, 1, 1), "wasteland");
+        paintings.put(new Location(0, 0, 1, 1), "kebab");
+        paintings.put(new Location(1, 0, 1, 1), "aztec");
+        paintings.put(new Location(2, 0, 1, 1), "alban");
+        paintings.put(new Location(3, 0, 1, 1), "aztec2");
+        paintings.put(new Location(4, 0, 1, 1), "bomb");
+        paintings.put(new Location(5, 0, 1, 1), "plant");
+        paintings.put(new Location(6, 0, 1, 1), "wasteland");
 
         // 2x1 paintings
-        this.paintings.put(new Location(0, 2, 2, 1), "pool");
-        this.paintings.put(new Location(2, 2, 2, 1), "courbet");
-        this.paintings.put(new Location(4, 2, 2, 1), "sea");
-        this.paintings.put(new Location(6, 2, 2, 1), "sunset");
-        this.paintings.put(new Location(8, 2, 2, 1), "creebet");
+        paintings.put(new Location(0, 2, 2, 1), "pool");
+        paintings.put(new Location(2, 2, 2, 1), "courbet");
+        paintings.put(new Location(4, 2, 2, 1), "sea");
+        paintings.put(new Location(6, 2, 2, 1), "sunset");
+        paintings.put(new Location(8, 2, 2, 1), "creebet");
 
         // 1x2 paintings
-        this.paintings.put(new Location(0, 4, 1, 2), "wanderer");
-        this.paintings.put(new Location(1, 4, 1, 2), "graham");
+        paintings.put(new Location(0, 4, 1, 2), "wanderer");
+        paintings.put(new Location(1, 4, 1, 2), "graham");
 
         // 4x2 painting
-        this.paintings.put(new Location(0, 6, 4, 2), "fighters");
+        paintings.put(new Location(0, 6, 4, 2), "fighters");
 
         // 2x2 paintings
-        this.paintings.put(new Location(0, 8, 2, 2), "match");
-        this.paintings.put(new Location(2, 8, 2, 2), "bust");
-        this.paintings.put(new Location(4, 8, 2, 2), "stage");
-        this.paintings.put(new Location(6, 8, 2, 2), "void");
-        this.paintings.put(new Location(8, 8, 2, 2), "skull_and_roses");
-        this.paintings.put(new Location(10, 8, 2, 2), "wither");
+        paintings.put(new Location(0, 8, 2, 2), "match");
+        paintings.put(new Location(2, 8, 2, 2), "bust");
+        paintings.put(new Location(4, 8, 2, 2), "stage");
+        paintings.put(new Location(6, 8, 2, 2), "void");
+        paintings.put(new Location(8, 8, 2, 2), "skull_and_roses");
+        paintings.put(new Location(10, 8, 2, 2), "wither");
 
         // 4x4 paintings
-        this.paintings.put(new Location(0, 12, 4, 4), "pointer");
-        this.paintings.put(new Location(4, 12, 4, 4), "pigscene");
-        this.paintings.put(new Location(8, 12, 4, 4), "burning_skull");
+        paintings.put(new Location(0, 12, 4, 4), "pointer");
+        paintings.put(new Location(4, 12, 4, 4), "pigscene");
+        paintings.put(new Location(8, 12, 4, 4), "burning_skull");
 
         // 4x3 paintings
-        this.paintings.put(new Location(12, 4, 4, 3), "skeleton");
-        this.paintings.put(new Location(12, 7, 4, 3), "donkey_kong");
+        paintings.put(new Location(12, 4, 4, 3), "skeleton");
+        paintings.put(new Location(12, 7, 4, 3), "donkey_kong");
 
         // 1x1 back image
-        this.paintings.put(new Location(12, 0, 1, 1), "back");
+        paintings.put(new Location(12, 0, 1, 1), "back");
     }
 
     @Override
@@ -90,7 +90,7 @@ public class PaintingConverter extends Converter {
 
         Path paintingsDir = imagePath.getParent();
         int multiplier = image.getWidth() / 16;
-        this.paintings.forEach((location, output) -> {
+        paintings.forEach((location, output) -> {
             BufferedImage subImage = image.getSubimage(location.x * multiplier, location.y * multiplier, location.width * multiplier, location.height * multiplier);
             Path outputFile = paintingsDir.resolve(output + ".png");
             try {
