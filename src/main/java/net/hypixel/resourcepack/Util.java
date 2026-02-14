@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public final class Util {
 
@@ -34,23 +35,31 @@ public final class Util {
     }
 
     public static void copyDir(Path src, Path dest) throws IOException {
-        Files.walk(src).forEach(path -> {
-            try {
-                Files.copy(path, dest.resolve(src.relativize(path)));
-            } catch (Throwable e) {
-                throw Util.propagate(e);
-            }
-        });
+        try (Stream<Path> walk = Files.walk(src)) {
+
+            walk.forEach(path -> {
+                try {
+                    Files.copy(path, dest.resolve(src.relativize(path)));
+                } catch (Throwable e) {
+                    throw Util.propagate(e);
+                }
+            });
+
+        }
+
     }
 
     public static void deleteDirectoryAndContents(Path dirPath) throws IOException {
         if (!dirPath.toFile().exists()) return;
 
         //noinspection ResultOfMethodCallIgnored
-        Files.walk(dirPath)
-                .sorted(Comparator.reverseOrder())
-                .map(Path::toFile)
-                .forEach(File::delete);
+        try (Stream<Path> walk = Files.walk(dirPath)) {
+            walk
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        }
+
     }
 
     public static boolean fileExistsCorrectCasing(Path path) throws IOException {

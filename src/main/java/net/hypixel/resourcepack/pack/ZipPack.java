@@ -46,7 +46,9 @@ public class ZipPack extends Pack {
                 System.out.println("  Deleting existing conversion zip");
             }
 
-            pack.getWorkingPath().toFile().mkdir();
+            if (pack.getWorkingPath().toFile().mkdir()) {
+                System.out.println("Creating working space");
+            }
 
             try {
                 ZipFile zipFile = new ZipFile(pack.getOriginalPath().toFile());
@@ -62,6 +64,7 @@ public class ZipPack extends Pack {
                 System.out.println("  Zipping working directory");
                 ZipFile zipFile = new ZipFile(getConvertedZipPath().toFile());
                 ZipParameters parameters = new ZipParameters();
+
                 parameters.setIncludeRootFolder(false);
                 zipFile.createZipFileFromFolder(pack.getWorkingPath().toFile(), parameters, false, 65536);
             } catch (ZipException e) {
